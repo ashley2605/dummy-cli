@@ -6,34 +6,94 @@
     <title>Dummy CLI</title>
     <style>
         body {
-            background-color: black;
-            color: green;
+            background: linear-gradient(135deg, #000000, #111111);
+            color: #00ff00;
             font-family: 'Courier New', monospace;
             padding: 20px;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-shadow: 0 0 10px #00ff00;
+        }
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #00ff00;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
         }
         #output {
             white-space: pre-wrap;
-            margin-bottom: 10px;
+            margin-bottom: 20px;
+            min-height: 300px;
+            overflow-y: auto;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #333;
+        }
+        .credentials {
+            background: linear-gradient(45deg, #222, #333);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #00ff00;
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
+            text-align: center;
+            font-weight: bold;
+        }
+        .input-container {
+            display: flex;
+            align-items: center;
+        }
+        .prompt {
+            color: #00ff00;
+            margin-right: 10px;
         }
         #input {
-            background-color: black;
-            color: green;
+            background-color: transparent;
+            color: #00ff00;
             border: none;
             outline: none;
             font-family: 'Courier New', monospace;
-            width: 100%;
+            font-size: 16px;
+            flex: 1;
+            text-shadow: 0 0 5px #00ff00;
         }
-        .credentials {
-            background-color: #222;
-            padding: 10px;
-            border-radius: 5px;
+        #input::placeholder {
+            color: #666;
+        }
+        .blink {
+            animation: blink 1s infinite;
+        }
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+        .welcome {
+            text-align: center;
+            font-size: 24px;
             margin-bottom: 20px;
+            color: #ffff00;
+            text-shadow: 0 0 15px #ffff00;
         }
     </style>
 </head>
 <body>
-    <div id="output"></div>
-    <input type="text" id="input" autofocus>
+    <div class="container">
+        <div class="welcome">🔒 Secure System Access 🔒</div>
+        <div id="output"></div>
+        <div class="input-container">
+            <span class="prompt">&gt;</span>
+            <input type="text" id="input" autofocus placeholder="Enter command...">
+            <span class="blink">|</span>
+        </div>
+    </div>
     <script>
         var state = 'login';
         var output = document.getElementById('output');
@@ -43,7 +103,7 @@
             switch(state) {
                 case 'login':
                     output.innerHTML = 'Welcome to the System\n\n';
-                    output.innerHTML += '<div class="credentials">Username: admin\nPassword: password123</div>\n';
+                    output.innerHTML += '<div class="credentials">🔑 Username: admin<br>🔒 Password: password123</div>\n';
                     output.innerHTML += 'Enter username: ';
                     break;
                 case 'password':
@@ -71,37 +131,37 @@
                             state = 'password';
                             updateOutput();
                         } else {
-                            output.innerHTML += 'Invalid username\n';
+                            output.innerHTML += '❌ Invalid username\n';
                             updateOutput();
                         }
                         break;
                     case 'password':
                         if (cmd === 'password123') {
-                            output.innerHTML += 'Access granted to the system\n\n';
+                            output.innerHTML += '✅ Access granted to the system\n\n';
                             state = 'scan';
                             updateOutput();
                         } else {
-                            output.innerHTML += 'Invalid password\n';
+                            output.innerHTML += '❌ Invalid password\n';
                             state = 'login';
                             updateOutput();
                         }
                         break;
                     case 'scan':
                         if (cmd.toLowerCase() === 'start scan') {
-                            output.innerHTML += 'Scanning...\nDummy data: 192.168.1.1, port 80 open\nVulnerability found: SQL injection\nScan completed\n\n';
+                            output.innerHTML += '🔍 Scanning...\n📊 Dummy data: 192.168.1.1, port 80 open\n⚠️ Vulnerability found: SQL injection\n✅ Scan completed\n\n';
                             state = 'hack';
                             updateOutput();
                         } else {
-                            output.innerHTML += 'Invalid command\n';
+                            output.innerHTML += '❌ Invalid command\n';
                             updateOutput();
                         }
                         break;
                     case 'hack':
                         if (cmd.toLowerCase() === 'hack system') {
-                            output.innerHTML += 'Hacking...\nInjecting payload...\nBypassing firewall...\nAccess granted\n';
+                            output.innerHTML += '💀 Hacking...\n🛠️ Injecting payload...\n🔥 Bypassing firewall...\n🎉 Access granted\n';
                             state = 'done';
                         } else {
-                            output.innerHTML += 'Invalid command\n';
+                            output.innerHTML += '❌ Invalid command\n';
                             updateOutput();
                         }
                         break;
