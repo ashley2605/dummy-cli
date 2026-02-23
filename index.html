@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dummy CLI</title>
+    <style>
+        body {
+            background-color: black;
+            color: green;
+            font-family: 'Courier New', monospace;
+            padding: 20px;
+        }
+        #output {
+            white-space: pre-wrap;
+            margin-bottom: 10px;
+        }
+        #input {
+            background-color: black;
+            color: green;
+            border: none;
+            outline: none;
+            font-family: 'Courier New', monospace;
+            width: 100%;
+        }
+        .credentials {
+            background-color: #222;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="output"></div>
+    <input type="text" id="input" autofocus>
+    <script>
+        var state = 'login';
+        var output = document.getElementById('output');
+        var input = document.getElementById('input');
+
+        function updateOutput() {
+            switch(state) {
+                case 'login':
+                    output.innerHTML = 'Welcome to the System\n\n';
+                    output.innerHTML += '<div class="credentials">Username: admin\nPassword: password123</div>\n';
+                    output.innerHTML += 'Enter username: ';
+                    break;
+                case 'password':
+                    output.innerHTML += 'Enter password: ';
+                    break;
+                case 'scan':
+                    output.innerHTML += 'Type start scan: ';
+                    break;
+                case 'hack':
+                    output.innerHTML += 'Type Hack System: ';
+                    break;
+            }
+        }
+
+        updateOutput();
+
+        input.onkeypress = function(e) {
+            if (e.key === 'Enter') {
+                var cmd = input.value.trim();
+                input.value = '';
+                output.innerHTML += cmd + '\n';
+                switch(state) {
+                    case 'login':
+                        if (cmd === 'admin') {
+                            state = 'password';
+                            updateOutput();
+                        } else {
+                            output.innerHTML += 'Invalid username\n';
+                            updateOutput();
+                        }
+                        break;
+                    case 'password':
+                        if (cmd === 'password123') {
+                            output.innerHTML += 'Access granted to the system\n\n';
+                            state = 'scan';
+                            updateOutput();
+                        } else {
+                            output.innerHTML += 'Invalid password\n';
+                            state = 'login';
+                            updateOutput();
+                        }
+                        break;
+                    case 'scan':
+                        if (cmd.toLowerCase() === 'start scan') {
+                            output.innerHTML += 'Scanning...\nDummy data: 192.168.1.1, port 80 open\nVulnerability found: SQL injection\nScan completed\n\n';
+                            state = 'hack';
+                            updateOutput();
+                        } else {
+                            output.innerHTML += 'Invalid command\n';
+                            updateOutput();
+                        }
+                        break;
+                    case 'hack':
+                        if (cmd.toLowerCase() === 'hack system') {
+                            output.innerHTML += 'Hacking...\nInjecting payload...\nBypassing firewall...\nAccess granted\n';
+                            state = 'done';
+                        } else {
+                            output.innerHTML += 'Invalid command\n';
+                            updateOutput();
+                        }
+                        break;
+                }
+            }
+        };
+    </script>
+</body>
+</html>
