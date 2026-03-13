@@ -1,174 +1,144 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dummy CLI</title>
-    <style>
-        body {
-            background: linear-gradient(135deg, #000000, #111111);
-            color: #00ff00;
-            font-family: 'Courier New', monospace;
-            padding: 20px;
-            margin: 0;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-shadow: 0 0 10px #00ff00;
-        }
-        .container {
-            max-width: 800px;
-            width: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            border: 2px solid #00ff00;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
-        }
-        #output {
-            white-space: pre-wrap;
-            margin-bottom: 20px;
-            min-height: 300px;
-            overflow-y: auto;
-            background: rgba(0, 0, 0, 0.5);
-            padding: 10px;
-            border-radius: 5px;
-            border: 1px solid #333;
-        }
-        .credentials {
-            background: linear-gradient(45deg, #222, #333);
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            border: 1px solid #00ff00;
-            box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
-            text-align: center;
-            font-weight: bold;
-        }
-        .input-container {
-            display: flex;
-            align-items: center;
-        }
-        .prompt {
-            color: #00ff00;
-            margin-right: 10px;
-        }
-        #input {
-            background-color: transparent;
-            color: #00ff00;
-            border: none;
-            outline: none;
-            font-family: 'Courier New', monospace;
-            font-size: 16px;
-            flex: 1;
-            text-shadow: 0 0 5px #00ff00;
-        }
-        #input::placeholder {
-            color: #666;
-        }
-        .blink {
-            animation: blink 1s infinite;
-        }
-        @keyframes blink {
-            0%, 50% { opacity: 1; }
-            51%, 100% { opacity: 0; }
-        }
-        .welcome {
-            text-align: center;
-            font-size: 24px;
-            margin-bottom: 20px;
-            color: #ffff00;
-            text-shadow: 0 0 15px #ffff00;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cyber Attack Database</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    <div class="container">
-        <div class="welcome">🔒 Secure System Access 🔒</div>
-        <div id="output"></div>
-        <div class="input-container">
-            <span class="prompt">&gt;</span>
-            <input type="text" id="input" autofocus placeholder="Enter command...">
-            <span class="blink">|</span>
+  <main class="container">
+    <aside class="sidebar">
+      <div class="logo">
+        <h1>CyberGPT</h1>
+        <p>Cyber Attack Database</p>
+      </div>
+      <nav class="sidebar-nav" aria-label="Sidebar menu">
+        <button class="sidebar-btn active" data-target="searchTab">Search</button>
+        <button class="sidebar-btn" data-target="discussionTab">Discussions</button>
+        <button class="sidebar-btn" data-target="addTab">Add</button>
+        <button class="sidebar-btn" data-target="manageTab">Manage</button>
+        <button class="sidebar-btn" data-target="adminTab">Admin</button>
+        <button class="sidebar-btn" data-target="aboutTab">About</button>
+      </nav>
+      <p class="sidebar-hint">Type a query and get fast, AI-style incident summaries.</p>
+    </aside>
+
+    <section class="chat-wrapper">
+      <header class="chat-header">
+        <h2>Query chat interface</h2>
+        <p>Pre-defined attack dataset + quick analytics.</p>
+      </header>
+
+      <div id="profileModal" class="profile-modal">
+        <div class="profile-card">
+          <h2>Welcome to CyberGPT Forum</h2>
+          <p>Please enter your details to continue.</p>
+          <input id="companyInput" type="text" placeholder="Company name (required)" />
+          <input id="designationInput" type="text" placeholder="Designation (required)" />
+          <input id="profilePhotoInput" type="file" accept="image/*" />
+          <small>Profile photo optional (jpg/png). Not mandatory.</small>
+          <button id="saveProfileBtn" class="primary">Save and continue</button>
+          <p id="profileWarning" class="warning"></p>
         </div>
-    </div>
-    <script>
-        var state = 'login';
-        var output = document.getElementById('output');
-        var input = document.getElementById('input');
+      </div>
 
-        function updateOutput() {
-            switch(state) {
-                case 'login':
-                    output.innerHTML = 'Welcome to the System\n\n';
-                    output.innerHTML += '<div class="credentials">🔑 Username: admin<br>🔒 Password: password123</div>\n';
-                    output.innerHTML += 'Enter username: ';
-                    break;
-                case 'password':
-                    output.innerHTML += 'Enter password: ';
-                    break;
-                case 'scan':
-                    output.innerHTML += 'Type "start scan": ';
-                    break;
-                case 'hack':
-                    output.innerHTML += 'Type "Hack System": ';
-                    break;
-            }
-        }
+      <section id="searchTab" class="tab-content active">
+        <div class="box">
+          <h2>Search Quick Chat</h2>
+          <div class="message-stream" id="result"></div>
+          <div class="input-row">
+            <input id="promptInput" type="text" placeholder="Ask about ransomware, phishing, zero-day..." aria-label="Search prompt" disabled />
+            <button id="searchBtn" class="primary" disabled>Send</button>
+          </div>
+          <div class="bottom-actions">
+            <button id="showAllBtn" class="secondary">Show all attacks</button>
+          </div>
+        </div>
+      </section>
 
-        updateOutput();
+      <section id="addTab" class="tab-content">
+        <div class="box">
+          <h2>Add a new attack entry</h2>
+          <form id="addAttackForm" class="add-form" autocomplete="off">
+            <input id="attackName" required placeholder="Name" />
+            <input id="attackYear" type="number" min="1900" max="2100" required placeholder="Year" />
+            <input id="attackPerpetrator" placeholder="Perpetrator" />
+            <input id="attackCategory" placeholder="Category" />
+            <input id="attackSector" placeholder="Sector" />
+            <input id="attackAffected" placeholder="Affected (e.g. systems, users)" />
+            <textarea id="attackDescription" required placeholder="Description"></textarea>
+            <textarea id="attackRealExample" required placeholder="Real-world example for non-tech users"></textarea>
+            <textarea id="attackRemediation" required placeholder="Remediation / impact mitigation"></textarea>
+            <button type="submit" class="primary">Save entry</button>
+          </form>
+        </div>
+      </section>
 
-        input.onkeypress = function(e) {
-            if (e.key === 'Enter') {
-                var cmd = input.value.trim();
-                input.value = '';
-                output.innerHTML += cmd + '\n';
-                switch(state) {
-                    case 'login':
-                        if (cmd === 'admin') {
-                            state = 'password';
-                            updateOutput();
-                        } else {
-                            output.innerHTML += '❌ Invalid username\n';
-                            updateOutput();
-                        }
-                        break;
-                    case 'password':
-                        if (cmd === 'password123') {
-                            output.innerHTML += '✅ Access granted to the system\n\n';
-                            state = 'scan';
-                            updateOutput();
-                        } else {
-                            output.innerHTML += '❌ Invalid password\n';
-                            state = 'login';
-                            updateOutput();
-                        }
-                        break;
-                    case 'scan':
-                        if (cmd.toLowerCase() === 'start scan') {
-                            output.innerHTML += '🔍 Scanning...\n📊 Dummy data: 192.168.1.1, port 80 open\n⚠️ Vulnerability found: SQL injection\n✅ Scan completed\n\n';
-                            state = 'hack';
-                            updateOutput();
-                        } else {
-                            output.innerHTML += '❌ Invalid command\n';
-                            updateOutput();
-                        }
-                        break;
-                    case 'hack':
-                        if (cmd.toLowerCase() === 'hack system') {
-                            output.innerHTML += '💀 Hacking...\n🛠️ Injecting payload...\n🔥 Bypassing firewall...\n🎉 Access granted\n';
-                            state = 'done';
-                        } else {
-                            output.innerHTML += '❌ Invalid command\n';
-                            updateOutput();
-                        }
-                        break;
-                }
-            }
-        };
-    </script>
+      <section id="manageTab" class="tab-content">
+        <div class="box">
+          <h2>Data Management</h2>
+          <button id="downloadAllBtn" class="primary">Download all data</button>
+          <div id="vulnerabilityList" class="vulnerability-list"></div>
+          <p id="manageNotice" class="notice"></p>
+        </div>
+      </section>
+
+      <section id="adminTab" class="tab-content">
+        <div class="box">
+          <h2>Admin Dashboard</h2>
+          <p class="notice">Login as admin to manage vulnerabilities, discussions, and blocked users.</p>
+          <input id="adminPassword" type="password" placeholder="Admin password" />
+          <button id="adminLoginBtn" class="primary">Login</button>
+          <p id="adminStatus" class="notice"></p>
+
+          <div id="adminPanel" class="hidden">
+            <h3>Blocked Users</h3>
+            <input id="blockUserInput" placeholder="Enter user tag to block e.g. Analyst@ACME" />
+            <button id="blockUserBtn" class="secondary">Block User</button>
+            <div id="blockedUsersList" class="blocked-list"></div>
+
+            <h3>User Directory</h3>
+            <div id="adminUsersList" class="blocked-list"></div>
+
+            <h3>Discussion Control</h3>
+            <button id="adminClearDiscussionsBtn" class="secondary">Clear discussions</button>
+
+            <h3>Vulnerability Control</h3>
+            <p>Use Manage tab entries to delete vulnerabilities.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="discussionTab" class="tab-content">
+        <div class="box">
+          <h2>Live Discussions</h2>
+          <p class="notice">Real-time style discussion (local only, app-side simulation).</p>
+          <div id="discussionStream" class="message-stream"></div>
+          <div class="input-row">
+            <input id="discussionInput" type="text" placeholder="Type a discussion message..." disabled />
+            <button id="discussionSendBtn" class="primary" disabled>Post</button>
+          </div>
+          <div class="bottom-actions">
+            <button id="clearDiscussionsBtn" class="secondary">Clear discussion history</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="aboutTab" class="tab-content">
+        <div class="box">
+          <h2>About CyberGPT</h2>
+          <p>The database is generated only for knowledge transmission and is developed by AQM Technologies Pvt. Ltd.</p>
+          <ul>
+            <li>Query-based search with insight cards</li>
+            <li>Local storage and quick export</li>
+            <li>Simple submission and management</li>
+          </ul>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
 </body>
 </html>
-
